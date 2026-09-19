@@ -13,5 +13,5 @@
 
 
 
-# LICENSE
+## LICENSE
 [MIT](./LICENSE)
