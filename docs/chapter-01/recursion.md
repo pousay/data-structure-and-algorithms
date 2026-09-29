@@ -230,3 +230,123 @@ For `f(4)`:
 > Code after the recursive call runs while coming back up.**
 
 This distinction is one of the most important things to understand when tracing recursive functions.
+
+
+
+
+# Recursive Calls and the Call Stack
+
+Every time a function calls another function, the program needs to remember enough information to return to the correct place afterward.
+
+Recursive calls are handled using a **stack**.
+
+Each active function call has a **stack frame** (also called an activation record) containing the information needed for that call.
+
+## Example
+
+Consider:
+
+```cpp
+int f(int n)
+{
+    if (n == 0)
+        return 0;
+
+    return n + f(n - 1);
+}
+```
+
+When calling:
+
+```cpp
+f(3);
+```
+
+the calls build up like this:
+
+```text
+f(3)
+  f(2)
+    f(1)
+      f(0)
+```
+
+At this point, `f(0)` reaches the base case and returns.
+
+The stack then unwinds:
+
+```text
+f(0) returns
+    ↓
+f(1) finishes
+    ↓
+f(2) finishes
+    ↓
+f(3) finishes
+```
+
+The stack follows **LIFO**:
+
+> Last In, First Out.
+
+The most recent function call must finish before the previous one can continue.
+
+---
+
+## Why Does the Stack Matter?
+
+Every active recursive call requires a stack frame.
+
+For a small recursion depth this is normally fine.
+
+But if recursion creates a very large number of simultaneously active calls, the program can run out of stack space.
+
+This is called **stack overflow**.
+
+For example, recursion without a working base case can continue indefinitely:
+
+```cpp
+void bad(int n)
+{
+    bad(n - 1);
+}
+```
+
+There is no base case, so the number of active calls keeps increasing until the stack is exhausted.
+
+---
+
+## Recursion Is Not Automatically Bad
+
+Recursion can be very useful when the problem naturally has a recursive structure.
+
+The important questions are:
+
+* Is there a correct base case?
+* Does every call make progress toward it?
+* Is the recursive structure actually useful?
+* Are we repeatedly doing the same work?
+
+A recursive solution can be much clearer than an equivalent iterative solution.
+
+On the other hand, recursion that simply behaves like a loop may not be a good use of recursion.
+
+For example, factorial:
+
+```cpp
+long factorial(int n)
+{
+    if (n <= 1)
+        return 1;
+
+    return n * factorial(n - 1);
+}
+```
+
+essentially performs the same work as a simple loop.
+
+The important lesson is not "avoid recursion."
+
+It is:
+
+> **Use recursion when the recursive structure actually helps solve the problem.**
