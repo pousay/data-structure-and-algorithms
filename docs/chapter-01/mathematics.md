@@ -256,3 +256,135 @@ The main ideas from this section are:
 * Logarithms and exponents are inverse operations.
 
 These concepts will become particularly useful as we move into **algorithm analysis and recursion**.
+
+
+
+
+# Proof Techniques
+
+## Mathematical Induction
+
+Mathematical induction is a technique used to prove that a statement is true for **every positive integer**.
+
+A useful way to think about it is with dominoes:
+
+1. Prove that the first domino falls.
+2. Prove that whenever one domino falls, the next one also falls.
+3. Therefore, all the dominoes fall.
+
+The same idea is used in mathematical induction.
+
+### The Three Steps
+
+A typical induction proof has three parts:
+
+#### 1. Base Case
+
+First, prove that the statement is true for the starting value, usually `n = 1`.
+
+#### 2. Inductive Hypothesis
+
+Assume that the statement is true for some arbitrary value `n`.
+
+This assumption is called the **inductive hypothesis**.
+
+#### 3. Inductive Step
+
+Using the inductive hypothesis, prove that the statement is also true for `n + 1`.
+
+If the base case is true and the inductive step works, the statement is true for all positive integers.
+
+---
+
+## Example
+
+Consider the statement:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) = n²
+```
+
+We want to prove that this is true for every positive integer `n`.
+
+### Step 1 — Base Case
+
+For `n = 1`:
+
+```text
+1 = 1²
+```
+
+which is true.
+
+So the base case works.
+
+### Step 2 — Inductive Hypothesis
+
+Assume the statement is true for some `n`:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) = n²
+```
+
+We don't need to prove this assumption. We temporarily assume it is true so that we can prove the next case.
+
+### Step 3 — Inductive Step
+
+We need to prove:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) + (2(n + 1) - 1) = (n + 1)²
+```
+
+From the inductive hypothesis:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) = n²
+```
+
+So we can replace the first part with `n²`:
+
+```text
+n² + (2(n + 1) - 1)
+```
+
+Simplify:
+
+```text
+n² + 2n + 1
+```
+
+which is:
+
+```text
+(n + 1)²
+```
+
+Therefore, if the statement is true for `n`, it is also true for `n + 1`.
+
+Since the base case is true and the inductive step works, the statement is true for every positive integer `n`.
+
+---
+
+## Why Induction Matters
+
+Induction is useful when we need to prove that something works for an entire sequence of values rather than checking each value individually.
+
+In computer science, induction can be used to reason about:
+
+* Recursive algorithms
+* Properties of data structures
+* Mathematical formulas
+* Algorithm correctness
+
+The important pattern to remember is:
+
+```text
+Base Case
+    ↓
+Assume it works for n
+    ↓
+Prove it works for n + 1
+    ↓
+Therefore it works for all n
+```
