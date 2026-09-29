@@ -350,3 +350,123 @@ The important lesson is not "avoid recursion."
 It is:
 
 > **Use recursion when the recursive structure actually helps solve the problem.**
+
+
+
+
+## Tail Recursion
+
+A recursive function is **tail recursive** when the recursive call is the last operation performed by the function.
+
+For example:
+
+```cpp
+void count(int n)
+{
+    if (n == 0)
+        return;
+
+    cout << n << " ";
+    count(n - 1);
+}
+```
+
+Here, after `count(n - 1)` returns, there is nothing left to do. This makes it possible to replace the recursion with a loop:
+
+```cpp
+void count(int n)
+{
+    while (n != 0)
+    {
+        cout << n << " ";
+        n = n - 1;
+    }
+}
+```
+
+### Why Tail Recursion Can Be a Problem
+
+Recursive calls use the call stack. With:
+
+```cpp
+count(4);
+```
+
+the calls build up like this:
+
+```text
+count(4)
+count(3)
+count(2)
+count(1)
+count(0)
+```
+
+But none of the previous calls need to do anything after the recursive call finishes.
+
+So the stack is being used unnecessarily. For a sufficiently large number of recursive calls, this can even cause a stack overflow.
+
+### Tail Recursive vs Non-Tail Recursive
+
+Consider:
+
+```cpp
+int sum(int n)
+{
+    if (n == 0)
+        return 0;
+
+    return n + sum(n - 1);
+}
+```
+
+This is **not** tail recursive.
+
+The recursive call is not the final operation because after `sum(n - 1)` returns, we still need to perform:
+
+```cpp
+n + result
+```
+
+For example:
+
+```text
+sum(3)
+  ↓
+3 + sum(2)
+      ↓
+    2 + sum(1)
+          ↓
+        1 + sum(0)
+              ↓
+              0
+```
+
+Then the calls return upward:
+
+```text
+sum(0) → 0
+sum(1) → 1 + 0 = 1
+sum(2) → 2 + 1 = 3
+sum(3) → 3 + 3 = 6
+```
+
+The stack is necessary because each call must remember its value of `n` while waiting for the recursive call to finish.
+
+> **Important:** Code before the recursive call runs while going down. Code after the recursive call runs while coming back up.
+
+The main distinction is:
+
+```cpp
+count(n - 1);          // tail recursion
+```
+
+Nothing remains to do.
+
+```cpp
+n + sum(n - 1);        // not tail recursion
+```
+
+Work remains after the recursive call returns.
+
+The book describes tail recursion as a recursive call at the last line and notes that it can be mechanically eliminated by replacing it with a loop.
