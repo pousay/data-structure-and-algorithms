@@ -470,3 +470,103 @@ n + sum(n - 1);        // not tail recursion
 Work remains after the recursive call returns.
 
 The book describes tail recursion as a recursive call at the last line and notes that it can be mechanically eliminated by replacing it with a loop.
+
+
+
+## Redundant Recursive Work
+
+Recursion itself is not necessarily inefficient. A major problem appears when different recursive calls repeatedly solve the same subproblem.
+
+A classic example is the recursive Fibonacci function:
+
+```cpp
+long fib(int n)
+{
+    if (n <= 1)
+        return 1;
+
+    return fib(n - 1) + fib(n - 2);
+}
+```
+
+At first, this looks like a natural implementation of the Fibonacci definition. However, it performs a large amount of duplicated work.
+
+For example, `fib(5)` creates a tree like this:
+
+```text
+fib(5)
+├── fib(4)
+│   ├── fib(3)
+│   │   ├── fib(2)
+│   │   └── fib(1)
+│   └── fib(2)
+└── fib(3)
+    ├── fib(2)
+    └── fib(1)
+```
+
+Notice that `fib(3)` is calculated twice, and `fib(2)` is calculated three times.
+
+As `n` becomes larger, the number of repeated calculations grows extremely quickly.
+
+### Why It Becomes Exponential
+
+Let `T(N)` represent the running time of `fib(N)`.
+
+Each non-base call performs two recursive calls:
+
+```text
+T(N) = T(N - 1) + T(N - 2) + 2
+```
+
+The two recursive calls cause the amount of work to grow very quickly. The resulting running time is exponential.
+
+This means that increasing `N` by a relatively small amount can cause a huge increase in the number of function calls.
+
+For comparison:
+
+```text
+O(N)       → grows linearly
+O(N²)      → grows quadratically
+O(2^N)     → grows exponentially
+```
+
+The important issue is not simply that recursion is being used. The problem is that the same subproblems are being solved over and over again.
+
+### Avoiding Repeated Work
+
+Instead of recalculating the same Fibonacci values, we can calculate each value once and store the results.
+
+For example, we can use an array and a loop:
+
+```cpp
+long fib(int n)
+{
+    if (n <= 1)
+        return 1;
+
+    vector<long> values(n + 1);
+
+    values[0] = 1;
+    values[1] = 1;
+
+    for (int i = 2; i <= n; ++i)
+        values[i] = values[i - 1] + values[i - 2];
+
+    return values[n];
+}
+```
+
+Now each Fibonacci value is calculated only once.
+
+The book uses this example to demonstrate the **compound-interest rule** of recursion: avoid recursive algorithms that repeatedly perform the same work.
+
+### Main Lesson
+
+> **Recursion is not automatically bad. Repeatedly solving the same subproblem is the real problem.**
+
+When designing a recursive algorithm, ask:
+
+1. Do I have a clear base case?
+2. Does every recursive call make progress toward it?
+3. Is there u
