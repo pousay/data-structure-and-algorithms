@@ -569,4 +569,21 @@ When designing a recursive algorithm, ask:
 
 1. Do I have a clear base case?
 2. Does every recursive call make progress toward it?
-3. Is there u
+3. Is there unnecessary work after the recursive call?
+4. Are different recursive branches solving the same subproblem repeatedly?
+
+If the same subproblem is being solved many times, there may be a much more efficient approach.
+
+## Recursion: What We Learned
+
+The main ideas covered in this section are:
+
+* A recursive function calls itself on a smaller or simpler problem.
+* Every recursive function needs a **base case**.
+* Each recursive call must make **progress toward the base case**.
+* The computer uses the **call stack** to keep track of active recursive calls.
+* Code before the recursive call executes while going down.
+* Code after the recursive call executes while coming back up.
+* **Tail recursion** has the recursive call as its final operation and can often be replaced by a loop.
+* Recursive algorithms can become extremely inefficient when they repeatedly solve the same subproblem.
+* The naive recursive Fibonacci algorithm is an example of exponential growth caused by redundant work.
