@@ -388,3 +388,103 @@ Prove it works for n + 1
     ↓
 Therefore it works for all n
 ```
+
+
+
+
+## Proof by Contradiction
+
+Proof by contradiction is a technique where we assume that a statement is **false** and then show that this assumption leads to a contradiction.
+
+The basic pattern is:
+
+```text
+Assume the statement is false
+        ↓
+Follow the consequences of that assumption
+        ↓
+Reach a contradiction
+        ↓
+Therefore, the original statement must be true
+```
+
+### Example
+
+Consider the statement:
+
+> There is no largest positive integer.
+
+Suppose we assume the opposite: that there **is** a largest positive integer.
+
+Call it `N`.
+
+But we can always construct:
+
+```text
+N + 1
+```
+
+Since `N` is positive, `N + 1` is also positive.
+
+And:
+
+```text
+N + 1 > N
+```
+
+So `N` cannot actually be the largest positive integer.
+
+This contradicts our assumption.
+
+Therefore, there is no largest positive integer.
+
+---
+
+## Counterexamples
+
+A counterexample is a single example that proves a general statement is false.
+
+Suppose someone claims:
+
+> Every positive integer is even.
+
+We only need to find **one** positive integer that is not even.
+
+For example:
+
+```text
+1
+```
+
+`1` is a positive integer, but it is not even.
+
+Therefore, the statement is false.
+
+### Important Difference
+
+Induction can be used to prove that a statement is true for **all** values.
+
+A counterexample can disprove a statement by finding **one** value where it fails.
+
+So:
+
+```text
+To prove a universal statement:
+→ We need a proof.
+
+To disprove a universal statement:
+→ One counterexample is enough.
+```
+
+---
+
+# Summary
+
+The main ideas from the mathematical preliminaries are:
+
+* Logarithms help describe repeated division and are important in algorithm analysis.
+* Mathematical induction proves that a statement holds for every value in a sequence.
+* Proof by contradiction starts by assuming the opposite and derives an impossible result.
+* A counterexample can disprove a universal statement with a single valid example.
+
+These mathematical tools provide some of the foundation we will use when analyzing algorithms and proving that they work correctly.
