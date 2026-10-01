@@ -90,3 +90,108 @@ Changing `a` does not change `b`, because they are separate objects.
 * Member functions operate on that state.
 * `public` and `private` control access.
 * Objects are independent instances of a class.
+
+
+## 2. Constructors and Initialization
+
+A constructor is a special member function that is called when an object is created.
+
+Its name is the same as the class name, and it has no return type.
+
+### Basic Constructor
+
+```cpp
+class Box {
+private:
+    int value;
+
+public:
+    Box() {
+        value = 0;
+    }
+};
+```
+
+When a `Box` object is created, its constructor initializes `value`.
+
+### Constructor Parameters and Default Arguments
+
+A constructor can accept parameters to initialize an object with a specific value.
+
+```cpp
+class Box {
+private:
+    int value;
+
+public:
+    Box(int initialValue = 0)
+        : value{initialValue} {
+    }
+
+    int getValue() const {
+        return value;
+    }
+};
+```
+
+Now we can create objects in different ways:
+
+```cpp
+Box a;      // value = 0
+Box b{12};  // value = 12
+Box c(20);  // value = 20
+```
+
+The default argument allows the constructor to be called without providing a value.
+
+### Member Initializer List
+
+The syntax:
+
+```cpp
+Box(int initialValue)
+    : value{initialValue} {
+}
+```
+
+uses a member initializer list.
+
+It initializes the data member directly before the constructor body executes.
+
+An alternative is assigning inside the constructor body:
+
+```cpp
+Box(int initialValue) {
+    value = initialValue;
+}
+```
+
+Both work for ordinary assignable members, but the initializer list is generally preferred.
+
+It is also necessary for initializing certain members, such as `const` members and references.
+
+### Initializing Multiple Members
+
+```cpp
+class Person {
+private:
+    std::string name;
+    int age;
+    double height;
+
+public:
+    Person(std::string n, int a, double h)
+        : name{n}, age{a}, height{h} {
+    }
+};
+```
+
+Each member is initialized through the initializer list.
+
+### Key Takeaways
+
+* Constructors run when objects are created.
+* Constructors have the same name as their class and no return type.
+* Parameters allow objects to start with different values.
+* Default arguments allow omitted constructor arguments.
+* Member initializer lists initialize members directly.
