@@ -352,3 +352,114 @@ This makes the code's intention clearer.
 * `explicit` prevents those implicit conversions.
 * Direct construction remains valid.
 * It helps avoid unintended type conversions and improves type safety.
+
+
+## 5. Separation of Interface and Implementation
+
+In C++, a class's interface and implementation are commonly separated into different files.
+
+* **Interface (`.h`)**: Declares the class, its data members, and its member functions.
+* **Implementation (`.cpp`)**: Defines how the member functions work.
+
+This allows other source files to use a class without needing to know its internal implementation.
+
+### Example Structure
+
+```text
+Counter.h
+Counter.cpp
+main.cpp
+```
+
+### Header File — `Counter.h`
+
+```cpp
+#ifndef COUNTER_H
+#define COUNTER_H
+
+class Counter {
+private:
+    int value{0};
+
+public:
+    void increment();
+    int getValue() const;
+};
+
+#endif
+```
+
+The header describes the class and its available operations.
+
+### Implementation File — `Counter.cpp`
+
+```cpp
+#include "Counter.h"
+
+void Counter::increment() {
+    value++;
+}
+
+int Counter::getValue() const {
+    return value;
+}
+```
+
+The `ClassName::functionName` syntax uses the **scope resolution operator (`::`)** to specify which class a function belongs to.
+
+The `const` qualifier must match the declaration.
+
+### Main File — `main.cpp`
+
+```cpp
+#include <iostream>
+#include "Counter.h"
+
+int main() {
+    Counter counter;
+
+    counter.increment();
+    counter.increment();
+
+    std::cout << counter.getValue() << '\n';
+
+    return 0;
+}
+```
+
+The main file uses the class through its interface.
+
+### Compilation and Linking
+
+The compiler uses declarations to understand and check function calls.
+
+The implementation must also be compiled and linked into the final executable.
+
+```bash
+g++ main.cpp Counter.cpp -o app
+./app
+```
+
+If the implementation is missing, compilation may succeed, but the linker can report an `undefined reference` error.
+
+### Include Guards
+
+Include guards prevent a header from being processed multiple times within the same translation unit.
+
+```cpp
+#ifndef COUNTER_H
+#define COUNTER_H
+
+// Class declaration
+
+#endif
+```
+
+### Key Takeaways
+
+* `.h` describes what a class exposes.
+* `.cpp` defines how its functions work.
+* `::` identifies a class member's scope.
+* Declarations and definitions must match.
+* The implementation must be linked into the final executable.
+* Include guards prevent duplicate header inclusion.
