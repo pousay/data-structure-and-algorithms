@@ -278,3 +278,77 @@ A `const` data member must be initialized, and it cannot be reassigned afterward
 * `const` member functions provide compiler-enforced protection against modifying the object's state.
 * Constant objects can call only compatible `const` member functions.
 * Constant data members must be initialized and cannot be reassigned.
+
+
+
+
+## 4. Explicit Constructors
+
+In C++, a constructor with one parameter can allow implicit type conversions.
+
+Consider:
+
+```cpp
+class Age {
+private:
+    int value;
+
+public:
+    Age(int initialValue)
+        : value{initialValue} {
+    }
+};
+```
+
+Without `explicit`, this may be allowed:
+
+```cpp
+Age age = 20;
+```
+
+C++ implicitly converts the integer `20` into an `Age` object.
+
+### Using `explicit`
+
+```cpp
+class Age {
+private:
+    int value;
+
+public:
+    explicit Age(int initialValue)
+        : value{initialValue} {
+    }
+};
+```
+
+Now:
+
+```cpp
+Age a{20};   // Valid
+Age b(20);   // Valid
+Age c = 20;  // Error
+```
+
+The `explicit` keyword prevents the constructor from being used for implicit conversions.
+
+### Why Use It?
+
+Implicit conversions can introduce unintended behavior.
+
+For example, a function expecting a `Money` object might accidentally accept an integer if a converting constructor exists.
+
+Using `explicit` requires the caller to construct the intended type deliberately.
+
+```cpp
+deposit(Money{500});
+```
+
+This makes the code's intention clearer.
+
+### Key Takeaways
+
+* One-parameter constructors can enable implicit conversions.
+* `explicit` prevents those implicit conversions.
+* Direct construction remains valid.
+* It helps avoid unintended type conversions and improves type safety.
