@@ -195,3 +195,86 @@ Each member is initialized through the initializer list.
 * Parameters allow objects to start with different values.
 * Default arguments allow omitted constructor arguments.
 * Member initializer lists initialize members directly.
+
+
+## 3. Accessors, Mutators, and const
+
+Member functions can be classified based on whether they modify the object's state.
+
+### Accessors
+
+An accessor examines or returns information about an object without changing its state.
+
+```cpp
+int getBalance() const {
+    return balance;
+}
+```
+
+The `const` after the parameter list indicates that the function does not modify the object's state.
+
+### Mutators
+
+A mutator changes the object's state.
+
+```cpp
+void deposit(double amount) {
+    balance += amount;
+}
+```
+
+### Constant Member Functions
+
+Consider:
+
+```cpp
+int getBalance() const {
+    return balance;
+}
+```
+
+The `const` qualifier:
+
+* Prevents the function from modifying non-mutable data members.
+* Allows the function to be called on constant objects.
+* Expresses that the function is intended to observe, not modify, the object's state.
+
+For example:
+
+```cpp
+const BankAccount account{100};
+
+std::cout << account.getBalance(); // Valid
+```
+
+If `getBalance()` were not declared `const`, this call would be invalid.
+
+### Constant Data Members
+
+A data member can also be declared `const`.
+
+```cpp
+class Person {
+private:
+    const std::string nationalCode;
+
+public:
+    Person(std::string code)
+        : nationalCode{code} {
+    }
+
+    std::string getNationalCode() const {
+        return nationalCode;
+    }
+};
+```
+
+A `const` data member must be initialized, and it cannot be reassigned afterward.
+
+### Key Takeaways
+
+* Accessors examine an object's state.
+* Mutators modify an object's state.
+* `const` member functions provide compiler-enforced protection against modifying the object's state.
+* Constant objects can call only compatible `const` member functions.
+* Constant data members must be initialized and cannot be reassigned.
