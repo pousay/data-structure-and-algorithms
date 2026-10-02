@@ -167,3 +167,78 @@ An rvalue reference (`T&&`) can bind to an rvalue.
 Rvalue references are important for move semantics.
 
 One subtle rule: although `ref` has an rvalue-reference type, using the name `ref` in an expression makes that expression an lvalue.
+
+
+## 4. Parameter Passing
+
+Function parameters determine whether a function receives a copy, can modify the original object, or can read it without copying.
+
+### Pass by value
+
+```cpp
+void change(int x) {
+    x = 100;
+}
+
+int main() {
+    int a = 10;
+    change(a);
+
+    cout << a; // 10
+}
+```
+
+The function receives a copy. Modifying the parameter does not modify the original variable.
+
+### Pass by reference
+
+```cpp
+void change(int& x) {
+    x = 100;
+}
+
+int main() {
+    int a = 10;
+    change(a);
+
+    cout << a; // 100
+}
+```
+
+The parameter is an alias for the original variable. Changes affect the caller's object.
+
+### Pass by constant reference
+
+```cpp
+void print(const int& x) {
+    cout << x;
+}
+```
+
+A constant reference:
+
+* Allows reading the original object.
+* Prevents modification through that reference.
+* Avoids copying the object.
+
+This is especially useful for large objects such as strings and vectors.
+
+### Choosing a parameter type
+
+| Parameter        | Behavior                | Typical use                                       |
+| ---------------- | ----------------------- | ------------------------------------------------- |
+| `T value`        | Receives a copy         | Small values or when a copy is needed             |
+| `T& value`       | Can modify the original | Functions that need to modify the caller's object |
+| `const T& value` | Reads without copying   | Large objects that should not be modified         |
+
+Example:
+
+```cpp
+void process(const std::vector<int>& values) {
+    for (int value : values) {
+        cout << value << '\n';
+    }
+}
+```
+
+The vector is not copied, and the function cannot modify it through `values`.
