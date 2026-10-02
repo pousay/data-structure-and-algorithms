@@ -392,3 +392,187 @@ The moved-from string can safely be assigned a new value.
 | May involve copying elements or resources | Can avoid expensive copying                            |
 
 For standard library containers, moving is often useful when transferring ownership of their allocated resources.
+
+
+
+## 1.5.6 The Big-Five
+
+The Big-Five are five special member functions in C++ that control how objects are created, copied, moved, and destroyed.
+
+They are especially important when a class manages resources such as dynamically allocated memory.
+
+### The Five Members
+
+1. Destructor
+2. Copy constructor
+3. Copy assignment operator
+4. Move constructor
+5. Move assignment operator
+
+### 1. Destructor
+
+The destructor is called when an object's lifetime ends. It is responsible for releasing resources owned by the object.
+
+```cpp
+class Box {
+public:
+    int* data;
+
+    Box(int value) : data{new int(value)} {}
+
+    ~Box() {
+        delete data;
+    }
+};
+```
+
+The destructor is written as `~ClassName()` and has no return type or parameters.
+
+### 2. Copy Constructor
+
+The copy constructor creates a new object from an existing object.
+
+```cpp
+Box(const Box& other) : value{other.value} {}
+```
+
+Example:
+
+```cpp
+Box a{10};
+Box b = a;
+```
+
+Here, `b` is initialized using `a`.
+
+For resource-owning classes, a proper copy constructor should usually perform a deep copy, creating independent resources rather than copying only a pointer address.
+
+### 3. Copy Assignment Operator
+
+Copy assignment replaces the contents of an already existing object.
+
+```cpp
+Box& operator=(const Box& other) {
+    value = other.value;
+    return *this;
+}
+```
+
+Example:
+
+```cpp
+Box a{10};
+Box b{20};
+
+b = a;
+```
+
+Unlike copy construction, `b` already exists when assignment happens.
+
+### 4. Move Constructor
+
+The move constructor initializes a new object by taking resources from another object.
+
+```cpp
+Box(Box&& other) : data{other.data} {
+    other.data = nullptr;
+}
+```
+
+Example:
+
+```cpp
+Box a{10};
+Box b = std::move(a);
+```
+
+`std::move` does not move resources by itself. It enables the compiler to select a move operation when one is available.
+
+After transferring ownership, the source object should remain in a valid state. Here, its pointer is set to `nullptr`.
+
+### 5. Move Assignment Operator
+
+Move assignment transfers resources into an object that already exists.
+
+```cpp
+Box& operator=(Box&& other) {
+    if (this != &other) {
+        delete data;
+        data = other.data;
+        other.data = nullptr;
+    }
+
+    return *this;
+}
+```
+
+Example:
+
+```cpp
+Box a{10};
+Box b{20};
+
+b = std::move(a);
+```
+
+The existing resource owned by `b` is released before it takes ownership of `a`'s resource.
+
+The self-assignment check prevents problems with expressions such as:
+
+```cpp
+a = std::move(a);
+```
+
+### Copy vs Move
+
+| Expression              | Operation        |
+| ----------------------- | ---------------- |
+| `Box b = a;`            | Copy constructor |
+| `b = a;`                | Copy assignment  |
+| `Box b = std::move(a);` | Move constructor |
+| `b = std::move(a);`     | Move assignment  |
+
+If no move assignment operator is available, copy assignment may still be selected if it can accept the rvalue.
+
+### Shallow Copy vs Deep Copy
+
+Consider a class that owns a raw pointer:
+
+```cpp
+class Box {
+public:
+    int* data;
+
+    Box(int value) : data{new int(value)} {}
+
+    ~Box() {
+        delete data;
+    }
+};
+```
+
+The compiler-generated copy constructor copies the pointer address, not the dynamically allocated integer.
+
+Consequently, two objects may point to the same allocation. When both destructors attempt to delete it, the program has undefined behavior.
+
+A deep copy creates a separate allocation for the copied object.
+
+### `noexcept`
+
+`noexcept` declares that a function is not expected to let exceptions escape.
+
+```cpp
+Box(Box&& other) noexcept : data{other.data} {
+    other.data = nullptr;
+}
+```
+
+It is useful for move operations that cannot throw. It can also allow standard containers such as `std::vector` to use move operations during reallocation while preserving their exception-safety guarantees.
+
+### Key Takeaway
+
+The Big-Five define how a class manages its resources throughout its lifetime.
+
+For classes that own raw resources, correct copy and move behavior is essential to prevent resource leaks, double deletion, and other ownership problems.
+
+Modern C++ often avoids manually managing raw ownership by using types such as `std::vector`, `std::string`, and smart pointers.
