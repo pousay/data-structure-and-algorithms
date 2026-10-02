@@ -242,3 +242,71 @@ void process(const std::vector<int>& values) {
 ```
 
 The vector is not copied, and the function cannot modify it through `values`.
+
+
+## 5. Return Passing
+
+A function can return a value or a reference.
+
+### Return by value
+
+```cpp
+int getValue(int x) {
+    return x;
+}
+```
+
+The function returns a value, not an alias to the original argument.
+
+Returning a local variable by value is safe:
+
+```cpp
+int getValue() {
+    int x = 10;
+    return x;
+}
+```
+
+The returned value remains usable after the local variable is destroyed.
+
+### Return by reference
+
+```cpp
+int& getValue(int& x) {
+    return x;
+}
+```
+
+This returns a reference to the original object.
+
+```cpp
+int a = 10;
+
+getValue(a) = 50;
+
+cout << a; // 50
+```
+
+Because the function returns a reference, its result can be used to modify the original object.
+
+### Dangling references
+
+Never return a reference to a local variable:
+
+```cpp
+int& getValue() {
+    int x = 10;
+    return x; // Dangerous: x is destroyed on return
+}
+```
+
+The returned reference would dangle because the referenced object no longer exists.
+
+### Return by value vs. reference
+
+| Return type | Result                                 |
+| ----------- | -------------------------------------- |
+| `T`         | Returns a value                        |
+| `T&`        | Returns an alias to an existing object |
+
+Returning by reference is only safe when the referenced object outlives the use of the returned reference.
