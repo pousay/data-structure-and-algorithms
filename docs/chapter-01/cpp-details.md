@@ -310,3 +310,85 @@ The returned reference would dangle because the referenced object no longer exis
 | `T&`        | Returns an alias to an existing object |
 
 Returning by reference is only safe when the referenced object outlives the use of the returned reference.
+
+
+## 6. `std::swap` and `std::move`
+
+### `std::swap`
+
+`std::swap` exchanges the values of two objects.
+
+```cpp
+#include <utility>
+
+int a = 10;
+int b = 20;
+
+std::swap(a, b);
+
+cout << a; // 20
+cout << b; // 10
+```
+
+Conceptually, swapping can be understood as:
+
+```cpp
+int temp = a;
+a = b;
+b = temp;
+```
+
+The standard library provides a generic implementation for supported types.
+
+### Copying vs. moving
+
+Consider:
+
+```cpp
+std::string a = "Hello";
+std::string b = a;
+```
+
+Copying creates an independent string. Modifying one does not modify the other.
+
+Moving is different:
+
+```cpp
+#include <utility>
+#include <string>
+
+std::string a = "Hello";
+std::string b = std::move(a);
+```
+
+`std::move` allows the object to be treated as an rvalue, enabling move semantics when supported by its type.
+
+For types such as `std::string` and `std::vector`, moving can transfer resources rather than copying all their contents.
+
+**Important:** `std::move` itself does not move anything. It is a cast that enables the appropriate move operation.
+
+### State after moving
+
+After moving from an object, it remains valid, but its value is generally unspecified.
+
+```cpp
+std::string a = "Hello";
+std::string b = std::move(a);
+
+a = "World";
+
+cout << a; // World
+cout << b; // Hello
+```
+
+The moved-from string can safely be assigned a new value.
+
+### Copy vs. move
+
+| Copy                                      | Move                                                   |
+| ----------------------------------------- | ------------------------------------------------------ |
+| Creates an independent value              | Can transfer resources                                 |
+| Source retains its value                  | Source remains valid, but its value may be unspecified |
+| May involve copying elements or resources | Can avoid expensive copying                            |
+
+For standard library containers, moving is often useful when transferring ownership of their allocated resources.
