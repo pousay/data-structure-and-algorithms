@@ -156,3 +156,89 @@ std::ostream& operator<<(std::ostream& out, const Square& rhs) {
 vector<Square> v = {Square{3.0}, Square{2.0}, Square{2.5}};
 cout << "Largest square: " << findMax(v) << '\n';   // (square 3)
 ```
+
+
+
+## 1.6.4 Function Objects
+
+### The problem
+
+`findMax` always decides "larger" with `operator<`. That is not always what we want:
+
+* For rectangles, "larger" could mean area, width, or smallest side.
+* For strings, `<` is case-sensitive, so `"ZEBRA"` comes before `"alligator"`.
+
+The comparison rule should not be baked into the type. Instead, we pass the rule as a parameter.
+
+### The idea
+
+An object holds data and member functions. A class with **no data and one member function**, passed as an object, is a way to pass a function as a parameter. That object is a **function object**.
+
+### Simple version
+
+```cpp
+template <typename Object, typename Comparator>
+const Object& findMax(const vector<Object>& arr, Comparator cmp) {
+    int maxIndex = 0;
+
+    for (int i = 1; i < arr.size(); ++i) {
+        if (cmp.isLessThan(arr[maxIndex], arr[i])) {
+            maxIndex = i;
+        }
+    }
+
+    return arr[maxIndex];
+}
+```
+
+### The C++ way: `operator()`
+
+C++ names the member function `operator()` (the **function call operator**), so the object can be called like a function: `isLessThan(x, y)`.
+
+```cpp
+template <typename Object, typename Comparator>
+const Object& findMax(const vector<Object>& arr, Comparator isLessThan) {
+    int maxIndex = 0;
+
+    for (int i = 1; i < arr.size(); ++i) {
+        if (isLessThan(arr[maxIndex], arr[i])) {
+            maxIndex = i;
+        }
+    }
+
+    return arr[maxIndex];
+}
+
+class CaseInsensitiveCompare {
+public:
+    bool operator()(const string& lhs, const string& rhs) const {
+        return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
+    }
+};
+```
+
+`strcasecmp` comes from `<strings.h>` (POSIX, available on Linux; not part of standard C++).
+
+### Default ordering
+
+A second overload uses the standard function object `less` (from `<functional>`) for normal `<` ordering:
+
+```cpp
+template <typename Object>
+const Object& findMax(const vector<Object>& arr) {
+    return findMax(arr, less<Object>{});
+}
+```
+
+```cpp
+vector<string> arr = {"ZEBRA", "alligator", "crocodile"};
+
+cout << findMax(arr, CaseInsensitiveCompare{}) << '\n';   // ZEBRA
+cout << findMax(arr) << '\n';                             // crocodile
+```
+
+With the default `<`, uppercase letters sort before lowercase, so `"crocodile"` is the largest. Ignoring case, `"ZEBRA"` is.
+
+### Where this is used later
+
+Later chapters (starting with trees in Chapter 4) mostly write code with `Comparable` for simplicity and show where a function object would be added.
