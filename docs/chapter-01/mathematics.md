@@ -1,13 +1,34 @@
 # Mathematical Preliminaries
 
+Before getting into data structures and algorithm analysis, we need a few mathematical tools that will appear throughout the book.
+
 This section covers:
 
-* Logarithms
-* Logarithm rules
+* Exponents (1.2.1)
+* Logarithms and logarithm rules (1.2.2)
+* Series (1.2.3)
+* Modular arithmetic (1.2.4)
+* Proof techniques: induction, contradiction, counterexamples (1.2.5)
 
 ---
 
-## Logarithms
+## 1.2.1 Exponents
+
+```text
+X^A * X^B   = X^(A+B)
+X^A / X^B   = X^(A-B)
+(X^A)^B     = X^(AB)
+X^N + X^N   = 2 * X^N     (not X^(2N))
+2^N + 2^N   = 2^(N+1)
+```
+
+The last two are the easy ones to get wrong. Adding two equal powers doubles the value, it does not double the exponent.
+
+Example: `2^10 + 2^10 = 1024 + 1024 = 2048 = 2^11`.
+
+---
+
+## 1.2.2 Logarithms
 
 A logarithm answers a simple question:
 
@@ -92,13 +113,11 @@ log 1024 = 10
 
 because the base is assumed to be 2.
 
----
-
-## Logarithm Rules
+### Logarithm Rules
 
 Logarithms have several useful rules that make calculations easier.
 
-### Product Rule
+#### Product Rule
 
 When multiplying two values:
 
@@ -130,9 +149,7 @@ Therefore:
 log₂(8 × 32) = 8
 ```
 
----
-
-### Quotient Rule
+#### Quotient Rule
 
 When dividing two values:
 
@@ -164,9 +181,7 @@ Therefore:
 log₂(256 / 16) = 4
 ```
 
----
-
-### Power Rule
+#### Power Rule
 
 When a value is raised to a power:
 
@@ -204,9 +219,7 @@ Therefore:
 log₂(4⁵) = 10
 ```
 
----
-
-## Logarithms and Exponents
+### Logarithms and Exponents
 
 Logarithms and exponents are essentially inverse operations.
 
@@ -241,250 +254,3 @@ log₂(1,048,576) = 20
 ```
 
 Understanding this relationship is important because algorithm analysis frequently moves between exponential and logarithmic expressions.
-
----
-
-## Summary
-
-The main ideas from this section are:
-
-* A logarithm tells us which power produces a number.
-* `log_b x = y` means `bʸ = x`.
-* In this book, logarithms are assumed to have base 2 unless otherwise specified.
-* Repeatedly dividing a value by 2 leads to a logarithmic number of steps.
-* Product, quotient, and power rules allow logarithmic expressions to be simplified.
-* Logarithms and exponents are inverse operations.
-
-These concepts will become particularly useful as we move into **algorithm analysis and recursion**.
-
-
-
-
-# Proof Techniques
-
-## Mathematical Induction
-
-Mathematical induction is a technique used to prove that a statement is true for **every positive integer**.
-
-A useful way to think about it is with dominoes:
-
-1. Prove that the first domino falls.
-2. Prove that whenever one domino falls, the next one also falls.
-3. Therefore, all the dominoes fall.
-
-The same idea is used in mathematical induction.
-
-### The Three Steps
-
-A typical induction proof has three parts:
-
-#### 1. Base Case
-
-First, prove that the statement is true for the starting value, usually `n = 1`.
-
-#### 2. Inductive Hypothesis
-
-Assume that the statement is true for some arbitrary value `n`.
-
-This assumption is called the **inductive hypothesis**.
-
-#### 3. Inductive Step
-
-Using the inductive hypothesis, prove that the statement is also true for `n + 1`.
-
-If the base case is true and the inductive step works, the statement is true for all positive integers.
-
----
-
-## Example
-
-Consider the statement:
-
-```text
-1 + 3 + 5 + ... + (2n - 1) = n²
-```
-
-We want to prove that this is true for every positive integer `n`.
-
-### Step 1 — Base Case
-
-For `n = 1`:
-
-```text
-1 = 1²
-```
-
-which is true.
-
-So the base case works.
-
-### Step 2 — Inductive Hypothesis
-
-Assume the statement is true for some `n`:
-
-```text
-1 + 3 + 5 + ... + (2n - 1) = n²
-```
-
-We don't need to prove this assumption. We temporarily assume it is true so that we can prove the next case.
-
-### Step 3 — Inductive Step
-
-We need to prove:
-
-```text
-1 + 3 + 5 + ... + (2n - 1) + (2(n + 1) - 1) = (n + 1)²
-```
-
-From the inductive hypothesis:
-
-```text
-1 + 3 + 5 + ... + (2n - 1) = n²
-```
-
-So we can replace the first part with `n²`:
-
-```text
-n² + (2(n + 1) - 1)
-```
-
-Simplify:
-
-```text
-n² + 2n + 1
-```
-
-which is:
-
-```text
-(n + 1)²
-```
-
-Therefore, if the statement is true for `n`, it is also true for `n + 1`.
-
-Since the base case is true and the inductive step works, the statement is true for every positive integer `n`.
-
----
-
-## Why Induction Matters
-
-Induction is useful when we need to prove that something works for an entire sequence of values rather than checking each value individually.
-
-In computer science, induction can be used to reason about:
-
-* Recursive algorithms
-* Properties of data structures
-* Mathematical formulas
-* Algorithm correctness
-
-The important pattern to remember is:
-
-```text
-Base Case
-    ↓
-Assume it works for n
-    ↓
-Prove it works for n + 1
-    ↓
-Therefore it works for all n
-```
-
-
-
-
-## Proof by Contradiction
-
-Proof by contradiction is a technique where we assume that a statement is **false** and then show that this assumption leads to a contradiction.
-
-The basic pattern is:
-
-```text
-Assume the statement is false
-        ↓
-Follow the consequences of that assumption
-        ↓
-Reach a contradiction
-        ↓
-Therefore, the original statement must be true
-```
-
-### Example
-
-Consider the statement:
-
-> There is no largest positive integer.
-
-Suppose we assume the opposite: that there **is** a largest positive integer.
-
-Call it `N`.
-
-But we can always construct:
-
-```text
-N + 1
-```
-
-Since `N` is positive, `N + 1` is also positive.
-
-And:
-
-```text
-N + 1 > N
-```
-
-So `N` cannot actually be the largest positive integer.
-
-This contradicts our assumption.
-
-Therefore, there is no largest positive integer.
-
----
-
-## Counterexamples
-
-A counterexample is a single example that proves a general statement is false.
-
-Suppose someone claims:
-
-> Every positive integer is even.
-
-We only need to find **one** positive integer that is not even.
-
-For example:
-
-```text
-1
-```
-
-`1` is a positive integer, but it is not even.
-
-Therefore, the statement is false.
-
-### Important Difference
-
-Induction can be used to prove that a statement is true for **all** values.
-
-A counterexample can disprove a statement by finding **one** value where it fails.
-
-So:
-
-```text
-To prove a universal statement:
-→ We need a proof.
-
-To disprove a universal statement:
-→ One counterexample is enough.
-```
-
----
-
-# Summary
-
-The main ideas from the mathematical preliminaries are:
-
-* Logarithms help describe repeated division and are important in algorithm analysis.
-* Mathematical induction proves that a statement holds for every value in a sequence.
-* Proof by contradiction starts by assuming the opposite and derives an impossible result.
-* A counterexample can disprove a universal statement with a single valid example.
-
-These mathematical tools provide some of the foundation we will use when analyzing algorithms and proving that they work correctly.
