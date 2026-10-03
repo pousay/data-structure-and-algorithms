@@ -392,3 +392,110 @@ The moved-from string can safely be assigned a new value.
 | May involve copying elements or resources | Can avoid expensive copying                            |
 
 For standard library containers, moving is often useful when transferring ownership of their allocated resources.
+
+
+
+
+
+## 1.5.7 C-Style Arrays and Strings
+
+### The array name is a pointer
+
+```cpp
+int arr[3] = {10, 20, 30};
+```
+
+`arr` is not a real array object. It is a **constant pointer** to memory large enough for 3 ints.
+
+```
+arr → [10][20][30]
+        0   1   2
+```
+
+Consequences:
+
+* `b = arr;` is illegal, because `arr` is a constant pointer.
+* When an array is passed to a function, only the address is passed. The size is lost, so it must be passed as an extra parameter.
+* There is no range checking. `arr[5] = 1;` compiles and writes into memory that belongs to something else (undefined behavior).
+
+```cpp
+int sum(int* a, int length) {
+    int total = 0;
+    for (int i = 0; i < length; ++i) {
+        total += a[i];
+    }
+    return total;
+}
+
+sum(arr, 3);
+```
+
+
+
+### Dynamic arrays with `new[]` and `delete[]`
+
+A C-style array size must be a compile-time constant. If the size is only known at runtime, allocate with `new[]`:
+
+```cpp
+int n = 5;
+int* arr2 = new int[n];
+// use arr2[0] ... arr2[n - 1]
+delete[] arr2;
+```
+
+Memory from `new[]` must be freed with `delete[]`. Forgetting it causes a **memory leak**.
+
+| | `new int[5]` | `int arr[5] = {1, 2, 3, 4, 5}` |
+|---|---|---|
+| Memory | heap, allocated at runtime | stack, part of the function |
+| Initial values | garbage | the listed values |
+| Freed by | you, with `delete[]` | automatically at end of scope |
+| Size | can be a variable | must be a constant |
+| The name | normal pointer, can be reassigned | constant pointer |
+
+Rules:
+
+* Every `new[]` is paired with `delete[]`.
+* Do not use the pointer after `delete[]`.
+
+
+
+### C-style strings
+
+A C-style string is a `char` array that ends with the null terminator `'\0'`:
+
+```cpp
+char s[6] = "Hello";
+```
+
+```
+s → [H][e][l][l][o][\0]
+```
+
+`"Hello"` has 5 letters but needs **6** boxes, one for `'\0'`.
+
+Functions from `<cstring>`:
+
+```cpp
+strlen(s);           // 5, counts until '\0'
+strcmp(s, "Hello");  // 0 means equal
+strcpy(t, s);        // copies including '\0'
+```
+
+`strcpy` does not check that the target is big enough. If it is too small, the `'\0'` lands outside the array and corrupts memory.
+
+
+
+### Which one to use
+
+`vector` and `string` are built on top of C-style arrays and strings and hide their dangers: they know their own size and free their own memory. It is almost always better to use them.
+
+Use C-style only when:
+
+* a C library function requires it, or
+* (rarely) a section of code must be optimized for speed.
+
+Extra context (not from the book): `std::string::c_str()` returns a `const char*`, so you can keep `std::string` and convert only at the call to such a function.
+
+
+
