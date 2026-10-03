@@ -43,3 +43,52 @@ findMax(v3);   // compiler generates a version with Comparable = string
 * **Overload rules:**
   * If a non-template function and a template both match, the non-template wins.
   * If two templates match equally well through approximate matches, the call is ambiguous and the code is illegal.
+
+
+
+
+## 1.6.2 Class Templates
+
+A class template works like a function template, but the pattern generates whole classes.
+
+```cpp
+template <typename Object>
+class MemoryCell {
+public:
+    explicit MemoryCell(const Object& initialValue = Object{})
+        : storedValue{initialValue} {
+    }
+
+    const Object& read() const {
+        return storedValue;
+    }
+
+    void write(const Object& x) {
+        storedValue = x;
+    }
+
+private:
+    Object storedValue;
+};
+```
+
+Usage:
+
+```cpp
+MemoryCell<int> m1;
+MemoryCell<string> m2{"hello"};
+
+m1.write(37);
+m2.write(m2.read() + " world");
+
+cout << m1.read() << '\n';   // 37
+cout << m2.read() << '\n';   // hello world
+```
+
+### Things to remember
+
+* `MemoryCell` is **not a class**, it is a class template. `MemoryCell<int>` and `MemoryCell<string>` are the actual classes.
+* `Object` must have a zero-parameter constructor, a copy constructor, and a copy assignment operator.
+* The constructor's default argument is `Object{}`, not `0`, because `0` may not be a valid `Object`.
+* `Object` is passed by const reference because it may be large.
+* Most class templates are written entirely in the header (see 1.6.5).
