@@ -429,3 +429,31 @@ int sum(int* a, int length) {
 
 sum(arr, 3);
 ```
+
+
+
+### Dynamic arrays with `new[]` and `delete[]`
+
+A C-style array size must be a compile-time constant. If the size is only known at runtime, allocate with `new[]`:
+
+```cpp
+int n = 5;
+int* arr2 = new int[n];
+// use arr2[0] ... arr2[n - 1]
+delete[] arr2;
+```
+
+Memory from `new[]` must be freed with `delete[]`. Forgetting it causes a **memory leak**.
+
+| | `new int[5]` | `int arr[5] = {1, 2, 3, 4, 5}` |
+|---|---|---|
+| Memory | heap, allocated at runtime | stack, part of the function |
+| Initial values | garbage | the listed values |
+| Freed by | you, with `delete[]` | automatically at end of scope |
+| Size | can be a variable | must be a constant |
+| The name | normal pointer, can be reassigned | constant pointer |
+
+Rules:
+
+* Every `new[]` is paired with `delete[]`.
+* Do not use the pointer after `delete[]`.
