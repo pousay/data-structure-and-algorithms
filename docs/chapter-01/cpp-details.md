@@ -392,3 +392,40 @@ The moved-from string can safely be assigned a new value.
 | May involve copying elements or resources | Can avoid expensive copying                            |
 
 For standard library containers, moving is often useful when transferring ownership of their allocated resources.
+
+
+
+
+
+## 1.5.7 C-Style Arrays and Strings
+
+### The array name is a pointer
+
+```cpp
+int arr[3] = {10, 20, 30};
+```
+
+`arr` is not a real array object. It is a **constant pointer** to memory large enough for 3 ints.
+
+```
+arr → [10][20][30]
+        0   1   2
+```
+
+Consequences:
+
+* `b = arr;` is illegal, because `arr` is a constant pointer.
+* When an array is passed to a function, only the address is passed. The size is lost, so it must be passed as an extra parameter.
+* There is no range checking. `arr[5] = 1;` compiles and writes into memory that belongs to something else (undefined behavior).
+
+```cpp
+int sum(int* a, int length) {
+    int total = 0;
+    for (int i = 0; i < length; ++i) {
+        total += a[i];
+    }
+    return total;
+}
+
+sum(arr, 3);
+```
