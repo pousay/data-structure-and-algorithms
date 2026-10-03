@@ -463,3 +463,62 @@ Include guards prevent a header from being processed multiple times within the s
 * Declarations and definitions must match.
 * The implementation must be linked into the final executable.
 * Include guards prevent duplicate header inclusion.
+
+
+
+
+---
+
+## 1.4.4 `vector` and `string`
+
+### Why they exist
+
+The built-in C++ array is not a first-class object:
+
+* it cannot be copied with `=`
+* it does not remember how many items it holds
+* its indexing does not check that the index is valid
+
+The built-in string is just a character array, so it has all of those problems plus more. For example, `==` does not compare the text of two built-in strings.
+
+`vector` and `string` from the standard library fix this:
+
+* a `vector` knows its size (`size()`)
+* both can be copied with `=`
+* two `string` objects can be compared with `==`, `<`, and so on
+
+If you can, avoid built-in arrays and strings.
+
+### Using a vector
+
+```cpp
+vector<int> squares(100);
+
+for (int i = 0; i < squares.size(); ++i) {
+    squares[i] = i * i;
+}
+
+int sum = 0;
+for (int i = 0; i < squares.size(); ++i) {
+    sum += squares[i];
+}
+```
+
+A vector can also start empty and grow as needed (details in Chapter 3).
+
+### Initializing a vector
+
+```cpp
+vector<int> a(12);                 // size 12, all zeros
+vector<int> daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+vector<int> b{31, 28, 31};         // braces, no '=', same idea
+```
+
+### The `{12}` trap
+
+```cpp
+vector<int> x{12};    // size 1, containing the single value 12
+vector<int> y(12);    // size 12
+```
+
+When braces are used, the initializer list wins. To call the "size" constructor, use parentheses.
