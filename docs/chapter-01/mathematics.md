@@ -254,3 +254,65 @@ log₂(1,048,576) = 20
 ```
 
 Understanding this relationship is important because algorithm analysis frequently moves between exponential and logarithmic expressions.
+
+
+
+---
+
+## 1.2.3 Series
+
+### Geometric series
+
+```text
+sum of 2^i  for i = 0..N   =  2^(N+1) - 1
+sum of A^i  for i = 0..N   =  (A^(N+1) - 1) / (A - 1)
+```
+
+Check: `1 + 2 + 4 + 8 = 15 = 2^4 - 1`.
+
+If `0 < A < 1`, the sum is bounded:
+
+```text
+sum of A^i  for i = 0..N   <=  1 / (1 - A)
+```
+
+and as `N` goes to infinity the sum approaches `1 / (1 - A)`. For `A = 1/2`: `1 + 1/2 + 1/4 + ... = 2`.
+
+### Deriving the infinite sum
+
+Let `S = 1 + A + A^2 + A^3 + ...`. Then `A*S = A + A^2 + A^3 + ...`. Subtract the two equations. Almost everything cancels:
+
+```text
+S - A*S = 1   =>   S = 1 / (1 - A)
+```
+
+This subtraction is only allowed for a convergent series.
+
+The same trick gives `sum of i / 2^i for i = 1..infinity`. Write `S = 1/2 + 2/4 + 3/8 + ...`, then `2S = 1 + 2/2 + 3/4 + 4/8 + ...`. Subtracting gives `S = 1 + 1/2 + 1/4 + ... = 2`.
+
+### Other sums that appear often
+
+```text
+sum of i      for i = 1..N  =  N(N+1)/2          ~  N^2 / 2
+sum of i^2    for i = 1..N  =  N(N+1)(2N+1)/6    ~  N^3 / 3
+sum of i^k    for i = 1..N  ~  N^(k+1) / |k+1|        (k != -1)
+```
+
+For `k = -1` the last formula does not work. That case is the **harmonic sum**:
+
+```text
+H_N = sum of 1/i for i = 1..N  ~  ln N
+```
+
+The error in this approximation tends to Euler's constant, about `0.5772`. The harmonic sum shows up far more in computer science than in other fields.
+
+### Two algebra rules
+
+```text
+sum of f(N) for i = 1..N      =  N * f(N)          (f(N) does not depend on i)
+sum of f(i) for i = n0..N     =  (sum for i = 1..N) - (sum for i = 1..n0-1)
+```
+
+### Why this matters
+
+Loops translate into sums. A loop that runs `i` times for each `i` from 1 to `N` costs `1 + 2 + ... + N = N(N+1)/2`, which is `O(N^2)`. Chapter 2 relies on these formulas constantly.
