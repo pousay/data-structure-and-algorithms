@@ -92,3 +92,67 @@ cout << m2.read() << '\n';   // hello world
 * The constructor's default argument is `Object{}`, not `0`, because `0` may not be a valid `Object`.
 * `Object` is passed by const reference because it may be large.
 * Most class templates are written entirely in the header (see 1.6.5).
+
+
+
+
+## 1.6.3 `Object` and `Comparable`
+
+The book uses two names for generic types:
+
+| Name | Assumed to have |
+|---|---|
+| `Object` | zero-parameter constructor, `operator=`, copy constructor |
+| `Comparable` | everything `Object` has, plus `operator<` that gives a total order |
+
+Two items are treated as equal when both `a < b` and `b < a` are false.
+
+### A class that works as `Comparable`
+
+```cpp
+class Square {
+public:
+    explicit Square(double s = 0.0) : side{s} {
+    }
+
+    double getSide() const {
+        return side;
+    }
+
+    double getArea() const {
+        return side * side;
+    }
+
+    void print(std::ostream& out = std::cout) const {
+        out << "(square " << getSide() << ")";
+    }
+
+    bool operator<(const Square& rhs) const {
+        return getSide() < rhs.getSide();
+    }
+
+private:
+    double side;
+};
+```
+
+`operator<` is **operator overloading**: we define what the built-in operator means for our class. With it, `findMax` works on a `vector<Square>`.
+
+### The output idiom
+
+To print a class with `<<`:
+
+1. Give the class a public member function `print` that takes an `ostream`.
+2. Write a global (non-member) `operator<<` that calls `print`.
+
+```cpp
+std::ostream& operator<<(std::ostream& out, const Square& rhs) {
+    rhs.print(out);
+    return out;
+}
+```
+
+```cpp
+vector<Square> v = {Square{3.0}, Square{2.0}, Square{2.5}};
+cout << "Largest square: " << findMax(v) << '\n';   // (square 3)
+```
