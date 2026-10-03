@@ -13,7 +13,7 @@ This repository contains:
 
 | Chapter                                                        | Topic                                               | Status      |
 | -------------------------------------------------------------- | --------------------------------------------------- | ----------- |
-| [Chapter 1 — Introduction](./docs/chapter-01/README.md)        | Mathematical foundations, recursion, and C++ basics | In Progress |
+| [Chapter 1 — Introduction](./docs/chapter-01/README.md)        | Mathematical foundations, recursion, and C++ basics | Complete |
 | Chapter 2 — Algorithm Analysis                                 |                                                     | Upcoming    |
 | Chapter 3 — Lists, Stacks, and Queues                          |                                                     | Upcoming    |
 | Chapter 4 — Trees                                              |                                                     | Upcoming    |

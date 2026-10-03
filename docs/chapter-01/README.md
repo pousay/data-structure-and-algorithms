@@ -12,7 +12,10 @@ This chapter introduces the mathematical foundations, problem-solving techniques
 
 * [Mathematical Foundations](mathematics.md)
 
+  * Exponents
   * Logarithms and their properties
+  * Series: geometric, arithmetic, harmonic
+  * Modular arithmetic
   * Mathematical induction
   * Proof by contradiction
   * Counterexamples
@@ -27,7 +30,7 @@ This chapter introduces the mathematical foundations, problem-solving techniques
   * Tail recursion
   * Redundant recursive calls
 
-### 1.4 C++ Basics
+### 1.4 C++ Classes
 
 * [Classes and Objects](cpp-classes.md)
 
@@ -36,14 +39,36 @@ This chapter introduces the mathematical foundations, problem-solving techniques
   * Accessors, mutators, and `const`
   * Explicit constructors
   * Interface and implementation separation
+  * `vector` and `string`
+  * Range-based `for` and `auto`
 
-* [Vectors and Strings](cpp-details.md)
+### 1.5 C++ Details
 
-  * Fixed arrays vs. vectors
-  * Size and capacity
-  * Vector operations
-  * Range-based loops and references
-  * String operations
+* [C++ Details](cpp-details.md)
+
+  * Pointers and `nullptr`
+  * Lvalues, rvalues, and references
+  * Parameter passing and return passing
+  * `std::swap` and `std::move`
+  * The Big-Five
+  * C-style arrays and strings
+
+### 1.6 Templates
+
+* [Templates](cpp-templates.md)
+
+  * Function templates
+  * Class templates
+  * `Object` and `Comparable`
+  * Function objects
+  * Separate compilation of class templates
+
+### 1.7 Using Matrices
+
+* [Matrices](cpp-matrices.md)
+
+  * A `vector`-of-`vector` matrix class
+  * `operator[]` and const-correctness
 
 ---
 
