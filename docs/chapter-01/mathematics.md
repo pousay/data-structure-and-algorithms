@@ -343,3 +343,236 @@ A * D  ≡  B * D  (mod N)
 The book uses modular arithmetic sparingly, and these three facts are enough for it.
 
 Extra context (not from the book): in code this is the `%` operator, and it is the basis of hash functions in Chapter 5.
+
+
+
+
+
+---
+
+## 1.2.5 Proof Techniques
+
+### Mathematical Induction
+
+Mathematical induction is a technique used to prove that a statement is true for **every positive integer**.
+
+A useful way to think about it is with dominoes:
+
+1. Prove that the first domino falls.
+2. Prove that whenever one domino falls, the next one also falls.
+3. Therefore, all the dominoes fall.
+
+The same idea is used in mathematical induction.
+
+#### The Three Steps
+
+A typical induction proof has three parts:
+
+**1. Base Case**
+
+First, prove that the statement is true for the starting value, usually `n = 1`.
+
+**2. Inductive Hypothesis**
+
+Assume that the statement is true for some arbitrary value `n`.
+
+This assumption is called the **inductive hypothesis**.
+
+**3. Inductive Step**
+
+Using the inductive hypothesis, prove that the statement is also true for `n + 1`.
+
+If the base case is true and the inductive step works, the statement is true for all positive integers.
+
+#### Example
+
+Consider the statement:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) = n²
+```
+
+We want to prove that this is true for every positive integer `n`.
+
+**Step 1: Base Case**
+
+For `n = 1`:
+
+```text
+1 = 1²
+```
+
+which is true.
+
+So the base case works.
+
+**Step 2: Inductive Hypothesis**
+
+Assume the statement is true for some `n`:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) = n²
+```
+
+We don't need to prove this assumption. We temporarily assume it is true so that we can prove the next case.
+
+**Step 3: Inductive Step**
+
+We need to prove:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) + (2(n + 1) - 1) = (n + 1)²
+```
+
+From the inductive hypothesis:
+
+```text
+1 + 3 + 5 + ... + (2n - 1) = n²
+```
+
+So we can replace the first part with `n²`:
+
+```text
+n² + (2(n + 1) - 1)
+```
+
+Simplify:
+
+```text
+n² + 2n + 1
+```
+
+which is:
+
+```text
+(n + 1)²
+```
+
+Therefore, if the statement is true for `n`, it is also true for `n + 1`.
+
+Since the base case is true and the inductive step works, the statement is true for every positive integer `n`.
+
+#### Why Induction Matters
+
+Induction is useful when we need to prove that something works for an entire sequence of values rather than checking each value individually.
+
+In computer science, induction can be used to reason about:
+
+* Recursive algorithms
+* Properties of data structures
+* Mathematical formulas
+* Algorithm correctness
+
+The important pattern to remember is:
+
+```text
+Base Case
+    ↓
+Assume it works for n
+    ↓
+Prove it works for n + 1
+    ↓
+Therefore it works for all n
+```
+
+### Proof by Contradiction
+
+Proof by contradiction is a technique where we assume that a statement is **false** and then show that this assumption leads to a contradiction.
+
+The basic pattern is:
+
+```text
+Assume the statement is false
+        ↓
+Follow the consequences of that assumption
+        ↓
+Reach a contradiction
+        ↓
+Therefore, the original statement must be true
+```
+
+#### Example
+
+Consider the statement:
+
+> There is no largest positive integer.
+
+Suppose we assume the opposite: that there **is** a largest positive integer.
+
+Call it `N`.
+
+But we can always construct:
+
+```text
+N + 1
+```
+
+Since `N` is positive, `N + 1` is also positive.
+
+And:
+
+```text
+N + 1 > N
+```
+
+So `N` cannot actually be the largest positive integer.
+
+This contradicts our assumption.
+
+Therefore, there is no largest positive integer.
+
+### Counterexamples
+
+A counterexample is a single example that proves a general statement is false.
+
+Suppose someone claims:
+
+> Every positive integer is even.
+
+We only need to find **one** positive integer that is not even.
+
+For example:
+
+```text
+1
+```
+
+`1` is a positive integer, but it is not even.
+
+Therefore, the statement is false.
+
+#### Important Difference
+
+Induction can be used to prove that a statement is true for **all** values.
+
+A counterexample can disprove a statement by finding **one** value where it fails.
+
+So:
+
+```text
+To prove a universal statement:
+→ We need a proof.
+
+To disprove a universal statement:
+→ One counterexample is enough.
+```
+
+---
+
+## Summary
+
+The main ideas from this section are:
+
+* Adding two equal powers doubles the value: `2^N + 2^N = 2^(N+1)`.
+* A logarithm tells us which power produces a number. `log_b x = y` means `bʸ = x`.
+* In this book, logarithms are assumed to have base 2 unless otherwise specified.
+* Repeatedly dividing a value by 2 leads to a logarithmic number of steps.
+* Product, quotient, and power rules allow logarithmic expressions to be simplified.
+* Geometric series sum to `(A^(N+1) - 1) / (A - 1)`, and for `0 < A < 1` they stay below `1 / (1 - A)`.
+* `sum of i` is about `N²/2`, `sum of i²` is about `N³/3`, and the harmonic sum is about `ln N`.
+* `A ≡ B (mod N)` means `A` and `B` leave the same remainder when divided by `N`.
+* Mathematical induction proves that a statement holds for every value in a sequence.
+* Proof by contradiction starts by assuming the opposite and derives an impossible result.
+* A counterexample can disprove a universal statement with a single valid example.
+
+These tools will be used throughout the book, starting with algorithm analysis and recursion.
