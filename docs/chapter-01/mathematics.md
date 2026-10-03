@@ -316,3 +316,30 @@ sum of f(i) for i = n0..N     =  (sum for i = 1..N) - (sum for i = 1..n0-1)
 ### Why this matters
 
 Loops translate into sums. A loop that runs `i` times for each `i` from 1 to `N` costs `1 + 2 + ... + N = N(N+1)/2`, which is `O(N^2)`. Chapter 2 relies on these formulas constantly.
+
+
+
+---
+
+## 1.2.4 Modular Arithmetic
+
+`A` is **congruent** to `B` modulo `N`, written `A ≡ B (mod N)`, if `N` divides `A - B`. Intuitively: `A` and `B` leave the same remainder when divided by `N`.
+
+Example: `81 ≡ 61 ≡ 1 (mod 10)`.
+
+Congruence behaves like equality. If `A ≡ B (mod N)`:
+
+```text
+A + C  ≡  B + C  (mod N)
+A * D  ≡  B * D  (mod N)
+```
+
+### Three facts when N is prime
+
+1. `ab ≡ 0 (mod N)` if and only if `a ≡ 0` or `b ≡ 0 (mod N)`. A prime that divides a product divides at least one factor.
+2. `ax ≡ 1 (mod N)` has exactly one solution `x` with `0 < x < N`, for every `0 < a < N`. This `x` is the **multiplicative inverse** of `a`.
+3. `x^2 ≡ a (mod N)` has either two solutions or none, for every `0 < a < N`.
+
+The book uses modular arithmetic sparingly, and these three facts are enough for it.
+
+Extra context (not from the book): in code this is the `%` operator, and it is the basis of hash functions in Chapter 5.
