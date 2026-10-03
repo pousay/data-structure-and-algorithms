@@ -483,3 +483,19 @@ strcpy(t, s);        // copies including '\0'
 ```
 
 `strcpy` does not check that the target is big enough. If it is too small, the `'\0'` lands outside the array and corrupts memory.
+
+
+
+### Which one to use
+
+`vector` and `string` are built on top of C-style arrays and strings and hide their dangers: they know their own size and free their own memory. It is almost always better to use them.
+
+Use C-style only when:
+
+* a C library function requires it, or
+* (rarely) a section of code must be optimized for speed.
+
+Extra context (not from the book): `std::string::c_str()` returns a `const char*`, so you can keep `std::string` and convert only at the call to such a function.
+
+
+
