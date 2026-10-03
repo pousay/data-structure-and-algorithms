@@ -522,3 +522,51 @@ vector<int> y(12);    // size 12
 ```
 
 When braces are used, the initializer list wins. To call the "size" constructor, use parentheses.
+
+
+
+
+### Using a string
+
+```cpp
+string a = "Hello";
+string b = "Hello";
+
+a == b;        // true, compares the text
+a.length();    // 5
+```
+
+`string` supports all the relational and equality operators (`==`, `!=`, `<`, `>`, ...).
+
+### Range `for` and `auto`
+
+Visiting every item in order is so common that C++11 added a shorter loop:
+
+```cpp
+int sum = 0;
+for (int x : squares) {
+    sum += x;
+}
+```
+
+If the element type is obvious, `auto` lets the compiler deduce it:
+
+```cpp
+int sum = 0;
+for (auto x : squares) {
+    sum += x;
+}
+```
+
+Use a range `for` only when:
+
+* every item is visited, in order, and
+* you do not need the index.
+
+This form gives each `x` as a **copy**, so it only views the items. To change them, bind a reference (section 1.5.4):
+
+```cpp
+for (auto& x : squares) {
+    x *= 2;
+}
+```
