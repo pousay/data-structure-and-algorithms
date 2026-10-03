@@ -105,3 +105,20 @@ void copy(const matrix<int>& from, matrix<int>& to) {
     }
 }
 ```
+
+
+## 1.7.3 Big-Five
+
+The matrix class needs no destructor, copy constructor, copy assignment, move constructor, or move assignment of its own. Its only data member is a `vector`, which already implements all five correctly, so the compiler-generated versions do the right thing.
+
+That is the complete class. This is the payoff of using `vector` and not raw `new[]` arrays (see 1.5.6 and 1.5.7): the memory management is already done.
+
+### Quick check
+
+```cpp
+matrix<int> m(2, 3);
+m[1][2] = 7;
+
+cout << m.numrows() << '\n';   // 2
+cout << m.numcols() << '\n';   // 3
+```
