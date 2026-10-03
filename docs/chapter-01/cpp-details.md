@@ -457,3 +457,29 @@ Rules:
 
 * Every `new[]` is paired with `delete[]`.
 * Do not use the pointer after `delete[]`.
+
+
+
+### C-style strings
+
+A C-style string is a `char` array that ends with the null terminator `'\0'`:
+
+```cpp
+char s[6] = "Hello";
+```
+
+```
+s → [H][e][l][l][o][\0]
+```
+
+`"Hello"` has 5 letters but needs **6** boxes, one for `'\0'`.
+
+Functions from `<cstring>`:
+
+```cpp
+strlen(s);           // 5, counts until '\0'
+strcmp(s, "Hello");  // 0 means equal
+strcpy(t, s);        // copies including '\0'
+```
+
+`strcpy` does not check that the target is big enough. If it is too small, the `'\0'` lands outside the array and corrupts memory.
