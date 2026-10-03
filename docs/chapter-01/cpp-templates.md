@@ -242,3 +242,16 @@ With the default `<`, uppercase letters sort before lowercase, so `"crocodile"` 
 ### Where this is used later
 
 Later chapters (starting with trees in Chapter 4) mostly write code with `Comparable` for simplicity and show where a function object would be added.
+
+
+
+## 1.6.5 Separate Compilation of Class Templates
+
+A normal class can be split into a `.h` (interface) and a `.cpp` (implementation). For class templates this works badly: compiler support has historically been weak and platform specific, and the compiler often complains about missing functions.
+
+Because of this, the usual practice is:
+
+* put the **entire class template, with its implementation, in one header file**
+* popular Standard Library implementations do the same
+
+The book's online code does this for all class templates. In the text, the class interface is shown as if separate, while the implementations are shown as in the header-only code. (The mechanics of true separate compilation are in the book's Appendix A, which we are skipping.)
