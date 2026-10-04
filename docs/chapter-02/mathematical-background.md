@@ -61,3 +61,65 @@ O(N³)   true   (an upper bound can be loose)
 ```
 
 The useful answer is the tight one, `Θ(N²)`.
+
+
+
+
+
+
+## Simplification Rules
+
+In practice we do not write `c` and `n0` again. We simplify:
+
+1. **Drop constants:** `5N²` is `O(N²)`.
+2. **Drop lower-order terms:** `N² + N` is `O(N²)`.
+3. **Sum:** `O(f) + O(g)` is `O(max(f, g))`.
+4. **Product:** `O(f) * O(g)` is `O(f * g)`.
+
+```text
+N³ + 50N² + 7                 → O(N³)
+4N log N + 7N² + 1000         → O(N²)
+(N) * (log N)                 → O(N log N)
+```
+
+### The growth ladder (slowest to fastest)
+
+```text
+1  <  log N  <  N  <  N log N  <  N²  <  N³  <  2^N
+```
+
+Logarithms grow very slowly: `log^k N = O(N)` for any constant `k`. In this book, `log` means base 2 unless stated otherwise. Changing the base only changes a constant factor.
+
+## Comparing Two Functions
+
+Take the limit of the ratio as `N` goes to infinity:
+
+```text
+lim f(N) / g(N)  =  0          →  f = o(g)     (f grows slower)
+lim f(N) / g(N)  =  constant   →  f = Θ(g)     (same rate)
+lim f(N) / g(N)  =  ∞          →  g = o(f)     (f grows faster)
+```
+
+Calculus is rarely needed. Cancel the common factor and compare what is left:
+
+```text
+N log N   vs   N^1.5
+divide both by N:    log N   vs   N^0.5
+```
+
+`N^0.5` pulls away quickly:
+
+```text
+N = 10^4:   log N is about 13,  N^0.5 = 100
+N = 10^8:   log N is about 27,  N^0.5 = 10,000
+```
+
+So `N^1.5` grows faster than `N log N`.
+
+**Rule:** any power of `N` eventually beats any power of `log N`.
+
+## Style Rules
+
+* Write `O(N²)`, not `O(3N² + N)`. Drop constants and lower-order terms inside the Big-Oh.
+* Do not write `f(N) <= O(g(N))`. The "at most" is already part of `O`.
+* Do not write `f(N) >= O(g(N))`. It means nothing.
